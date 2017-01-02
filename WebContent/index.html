@@ -1,57 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>RRULE Parser - JSP servlet with AJAX</title>
-<link rel="stylesheet" type="text/css" href="rrule.css"/>
-<script type="text/javascript" src="rrule.js"></script>
-
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>RRULE Parser</title>
+	<meta name="description" content="Recurrencd Rule (RRULE) parser based in iCalendar RFC 5545 specification">
+	<meta name="keywords" content="rrule, icalendar, RFC 5545, recurrence rule, icalendarfx, java, jfxtras">
+	<meta name="author" content="David Bal">
+	<link rel="stylesheet" type="text/css" href="rrule.css"/>
+	<script type="text/javascript" src="rrule.js"></script>
 </head>
-
-<!-- <script type="text/javascript">
-function loadXMLDoc()
-{
-	var xmlhttp;
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-		} else {
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status = 200){
-				document.getElementById("message").innerHTML = xmlhttp.responseText;
-				} else
-				{
-					alert("Action can't be performed");
-				}
-			}
-		};
-
-		xmlhttp.open("POST", "RRuleServlet3");
-		xmlhttp.setRequestHeader('Content-type', "application/x-www-form-urlencoded");
-	    var rruleContent = document.getElementById('rruleContent').value;
-	    var dateTimeStart = document.getElementById('dateTimeStart').value
-	    var limit = document.getElementById('limit').value
-		xmlhttp.send("rruleContent=" + rruleContent + "&dateTimeStart=" + dateTimeStart + "&limit=" + limit);
-	}
-
-function buildRRule()
-{
-	
-}
-</script> -->
 
 <body>
 	<h1>RRULE Parser</h1>
 	<p>An iCalendar RRULE (recurrence rule) parser based on <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> .
-	 Generates a list of date or date/time values for the specified RRULE and DTSTART values.
+	 Generates a list of date or date/time values for the specified RRULE and DTSTART values.  Uses iCalendarFx, a Java library from <a href="http://jfxtras.org">JFXtras</a>.
 	 </p>
-	<div id="rrule">
-		RRULE <input type="text" size="35" id="rruleContent" value="RRULE:FREQ=DAILY" readonly><br>
-		DTSTART <input type="text" size="35" id="dateTimeStart" value="DTSTART:20170101T120000" readonly><br>
-	</div>
 	<div id="builder">
 		Repeat Frequency:
 		<select required id="freq" onchange="buildRRule()">
@@ -68,21 +31,18 @@ function buildRRule()
 			</optgroup>
 		</select>
 		<br>
+		Repeats every<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
 		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
 	</div>
-	<script type="text/javascript">loadXMLDoc();</script>
+	<div id="rrule">
+		RRULE <input type="text" size="35" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
+		DTSTART <input type="text" size="35" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
+	</div>
+	<script type="text/javascript">
+		loadXMLDoc();
+		buildRRule();
+	</script>
 	<button onclick="loadXMLDoc()">Submit</button>
-<p><span id='message'></span></p> 
-<p><span id='message2'></span></p> 
-
-<script type="text/javascript">
-function buildRRule()
-{
-    var freq = document.getElementById('freq').value;
-    var rrule = "RRULE:FREQ=" + freq;
-    document.getElementById('rruleContent').value = rrule;
-}
-</script>
-
+	<p><span id='result'></span></p> 
 </body>
 </html>

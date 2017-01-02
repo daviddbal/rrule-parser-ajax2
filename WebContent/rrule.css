@@ -8,10 +8,7 @@ h1 {
 div {
 	padding: 10px;
 	border: 2px solid black;
-}
-
-#rrule {
-	margin-bottom: 5px; 
+	margin: 5px
 }
 
 input {
