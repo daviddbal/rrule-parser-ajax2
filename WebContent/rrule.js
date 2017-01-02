@@ -105,10 +105,18 @@ function buildRRule()
     	
     	var isDayOfMonthChecked = document.getElementById('dayOfMonthCheckBox').checked;
     	var isDayOfWeekChecked = document.getElementById('dayOfWeekCheckBox').checked;
-    	var date = new Date(document.getElementById('dateStart').value);
+    	var dateString = document.getElementById('dateStart').value;
+    	var timeString = document.getElementById('timeStart').value;
+   	 	console.log("timeString:" + timeString);
+    	if (timeString === "")
+		{
+    		var d = new Date();
+    		timeString = d.getTime(); // TODO - GETTING UTC TIME AND WRONG FORMAT TOO
+		}
+    	var date = new Date(dateString + "T" + timeString);
     	var days = ['SU','MO','TU','WE','TH','FR','SA'];
     	var dayOfWeek = days[date.getDay()];
-   	 	console.log(date + " " + " " + dayOfWeek);
+   	 	console.log(dateString + "T" + timeString);
 
    	 	if (!isDayOfMonthChecked && !isDayOfWeekChecked)
 		{
