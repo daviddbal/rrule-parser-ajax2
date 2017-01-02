@@ -13,7 +13,7 @@
 <body>
 	<h1>RRULE Parser</h1>
 	<p>An iCalendar RRULE (recurrence rule) parser based on <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> .
-	 Generates a list of date or date/time values for the specified RRULE and DTSTART values.  Uses iCalendarFx, a Java library from <a href="http://jfxtras.org">JFXtras</a>.
+	 Generates a list of date or date/time values for the specified RRULE and DTSTART values.  Uses iCalendarFx, an iCalendar Java library from <a href="http://jfxtras.org">JFXtras</a>.
 	 </p>
 	<div id="builder">
 		Repeat Frequency:
@@ -43,22 +43,23 @@
   		</span><br>
   
 		<span id='monthlyOptions'>
-			<input type="radio" id="dayOfMonthCheckBox" onchange="buildRRule()" value="DAY_OF_MONTH" checked>Day of month
-	  		<input type="radio" id="dayOfWeekCheckBox" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week
+			<input type="radio" id="dayOfMonthCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_MONTH" checked>Day of month
+	  		<input type="radio" id="dayOfWeekCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week
   		</span><br>
   		
-		Start date<input type="date" id="dateStart" value="2017-01-01">
-		Start time<input type="time" id="timeStart" value="12:00:00"><br>
+		Start date<input type="date" id="dateStart" onchange="buildDTStart()" value="2017-01-01">
+		Start time<input type="time" id="timeStart" step="1" onchange="buildDTStart()" value="12:00:00"><br>
 		Days of the week<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
 		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
 	</div>
 	<div id="rrule">
-		RRULE <input type="text" size="35" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
-		DTSTART <input type="text" size="35" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
+		RRULE <input type="text" size="53" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
+		DTSTART <input type="text" size="50" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
 	</div>
 	<script type="text/javascript">
 		loadXMLDoc();
-		buildRRule();
+		initDate();
+		refreshRRuleAndDTStart();
 	</script>
 	<button onclick="loadXMLDoc()">Submit</button>
 	<p><span id='result'></span></p> 

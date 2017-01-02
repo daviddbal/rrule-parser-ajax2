@@ -29,6 +29,39 @@ function loadXMLDoc()
 	xmlhttp.send("rruleContent=" + rruleContent + "&dateTimeStart=" + dateTimeStart + "&limit=" + limit);
 }
 
+/*
+ * Initialize start date picker
+ */
+function initDate()
+{
+    var date = new Date();
+    var dateString = buildDate(date, "-"); // assemble ISO 8601 date
+    console.log("init dateString:" + dateString + " " + date);
+    document.getElementById('dateStart').value = dateString;
+}
+
+/*
+ * Build a date string
+ */
+function buildDate(date, delimiter)
+{
+    var yearString = date.toLocaleDateString('default', {year: 'numeric'});
+    var monthString = date.toLocaleDateString('default', {month: 'numeric'});
+    monthString = ("0" + monthString).slice(-2); // make 2-digits
+    var dayString = date.toLocaleDateString('default', {day: 'numeric'});
+    dayString = ("0" + dayString).slice(-2); // make 2-digits
+    return yearString + delimiter + monthString + delimiter + dayString;
+}
+
+function refreshRRuleAndDTStart()
+{
+	buildRRule();
+	buildDTStart();
+}
+
+/*
+ * Generate RRULE field
+ */
 function buildRRule()
 {
     var freq = document.getElementById('freq').value;
@@ -39,19 +72,6 @@ function buildRRule()
 	{
     	rrule += ";INTERVAL=" + interval;
 	}
-    
-    /*
-     * Handle DTSTART - make today at noon
-     */
-    var date = new Date();
-    var yearString = date.toLocaleDateString('default', {year: 'numeric'});
-    var monthString = date.toLocaleDateString('default', {month: 'numeric'});
-    monthString = ("0" + monthString).slice(-2); // make 2-digits
-    var dayString = date.toLocaleDateString('default', {day: 'numeric'});
-    dayString = ("0" + dayString).slice(-2); // make 2-digits
-    var dateString = yearString + "-" + monthString + "-" + dayString; // assemble ISO 8601 date
-    console.log("dateString:" + dateString);
-    document.getElementById('dateStart').value = dateString;
     
     /*
      * Handle Day-of-Week for Weekly frequency
@@ -120,7 +140,7 @@ function buildRRule()
     	var isDayOfWeekChecked = document.getElementById('dayOfWeekCheckBox').checked;
     	var dateString = document.getElementById('dateStart').value;
     	var timeString = document.getElementById('timeStart').value;
-   	 	console.log("timeString:" + timeString);
+//   	 	console.log("timeString:" + timeString);
     	if (timeString === "")
 		{
     		var d = new Date();
@@ -132,7 +152,7 @@ function buildRRule()
     	var date = new Date(dateString + "T" + timeString);
     	var days = ['SU','MO','TU','WE','TH','FR','SA'];
     	var dayOfWeek = days[date.getDay()];
-   	 	console.log(dateString + "T" + timeString);
+//   	 	console.log(dateString + "T" + timeString);
 
    	 	if (!isDayOfMonthChecked && !isDayOfWeekChecked)
 		{
@@ -142,9 +162,9 @@ function buildRRule()
     	 console.log(date + ":" + dayOfWeek);
     	if (isDayOfWeekChecked)
 		{
-    		var ordinal = 1; // TODO - CALCULATE THIS
+    		var ordinal = weekOrdinalInMonth(date);
 			rrule += ";BYDAY=" + ordinal + dayOfWeek;
-		} else (isDayOfMonthChecked)
+		} else if (isDayOfMonthChecked)
 		{
 			rrule += ";BYMONTHDAY=" + date.getDate();
 		}
@@ -191,3 +211,47 @@ function buildRRule()
     document.getElementById('intervalType').innerHTML = intervalType;
     console.log(freq);
 }
+
+/*
+ * Create DTSTART property for dateTimeStart
+ */
+function buildDTStart()
+{
+	var dateString = document.getElementById('dateStart').value;
+	dateString = dateString.replace("-","");
+	dateString = dateString.replace("-","");
+    var timeString = document.getElementById('timeStart').value;
+
+    var dateTimeStartString = "DTSTART"
+    if (timeString === "")
+	{
+		dateTimeStartString += ";VALUE=DATE" + ":" + dateString;
+	} else
+	{
+		timeString = timeString.replace(":", ""); // remove minutes :
+		if (timeString.indexOf(":") > 0)
+		{
+			timeString = timeString.replace(":", ""); // remove seconds :
+		} else
+		{
+			timeString += "00"; // add 2 zeros is seconds isn't present
+		}
+		dateTimeStartString += ":" + dateString + "T" + timeString;
+	}
+	document.getElementById('dateTimeStart').value = dateTimeStartString;
+}
+
+function weekOrdinalInMonth(date)
+{
+    var firstDayInMonth = new Date(date)
+    firstDayInMonth.setDate(1);
+    var testDate = firstDayInMonth;
+    console.log("ORDINAL:" + date + " " + firstDayInMonth);
+    var ordinalWeekNumber = 0;
+    while (testDate < date)
+    {
+        ordinalWeekNumber++;
+        testDate.setDate(testDate.getDate()+7); // add one week
+    }
+    return ordinalWeekNumber;
+	}
