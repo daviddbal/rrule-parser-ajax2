@@ -41,6 +41,19 @@ function buildRRule()
 	}
     
     /*
+     * Handle DTSTART - make today at noon
+     */
+    var date = new Date();
+    var yearString = date.toLocaleDateString('default', {year: 'numeric'});
+    var monthString = date.toLocaleDateString('default', {month: 'numeric'});
+    monthString = ("0" + monthString).slice(-2); // make 2-digits
+    var dayString = date.toLocaleDateString('default', {day: 'numeric'});
+    dayString = ("0" + dayString).slice(-2); // make 2-digits
+    var dateString = yearString + "-" + monthString + "-" + dayString; // assemble ISO 8601 date
+    console.log("dateString:" + dateString);
+    document.getElementById('dateStart').value = dateString;
+    
+    /*
      * Handle Day-of-Week for Weekly frequency
      */
     if (freq === "WEEKLY")
@@ -111,7 +124,10 @@ function buildRRule()
     	if (timeString === "")
 		{
     		var d = new Date();
-    		timeString = d.getTime(); // TODO - GETTING UTC TIME AND WRONG FORMAT TOO
+    		var options = { hour12: false };
+    		timeString = d.toLocaleTimeString('default', options); // TODO - GETTING UTC TIME AND WRONG FORMAT TOO
+    		console.log("timeString:" + timeString);
+    		console.log(d.toLocaleTimeString('en-US', { hour12: false }));
 		}
     	var date = new Date(dateString + "T" + timeString);
     	var days = ['SU','MO','TU','WE','TH','FR','SA'];
