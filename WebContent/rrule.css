@@ -14,3 +14,7 @@ div {
 input {
 	margin: 5px;
 }
+
+.options {
+	display: none;
+}

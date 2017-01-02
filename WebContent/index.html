@@ -32,36 +32,50 @@
 		</select>
 		<br>
 		Repeats every<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
-		<span id='dayOfWeek'>
+		<span id='dayOfWeek' class="options">
 			<input type="checkbox" id="sundayCheckbox" onchange="buildRRule()" value="SUNDAY">Sun
 	  		<input type="checkbox" id="mondayCheckbox" onchange="buildRRule()" value="MONDAY" >Mon
 			<input type="checkbox" id="tuesdayCheckbox" onchange="buildRRule()" value="TUESDAY">Tue
 	  		<input type="checkbox" id="wednesdayCheckbox" onchange="buildRRule()" value="WEDNESDAY" >Wed
 			<input type="checkbox" id="thursdayCheckbox" onchange="buildRRule()" value="THURSDAY">Thu
 	  		<input type="checkbox" id="fridayCheckbox" onchange="buildRRule()" value="FRIDAY" >Fri
-	  		<input type="checkbox" id="saturdayCheckbox" onchange="buildRRule()" value="SATURDAY" >Sat
-  		</span><br>
+	  		<input type="checkbox" id="saturdayCheckbox" onchange="buildRRule()" value="SATURDAY" >Sat<br>
+  		</span>
   
-		<span id='monthlyOptions'>
+		<span id='monthlyOptions' class="options">
 			<input type="radio" id="dayOfMonthCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_MONTH" checked>Day of month
-	  		<input type="radio" id="dayOfWeekCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week
-  		</span><br>
+	  		<input type="radio" id="dayOfWeekCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week<br>
+  		</span>
   		
 		Start date<input type="date" id="dateStart" onchange="buildDTStart()" value="2017-01-01">
 		Start time<input type="time" id="timeStart" step="1" onchange="buildDTStart()" value="12:00:00"><br>
-		Days of the week<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
+		
+		Ends:
+		<input type="radio" id="neverCheckBox" name="endRadioButtons" onchange="buildRRule()" checked>Never
+  		<input type="radio" id="afterCheckBox" name="endRadioButtons" onchange="buildRRule()" >After
+  		<input type="radio" id="onCheckBox" name="endRadioButtons" onchange="buildRRule()">On<br>
+  		<span id="afterSpan" class="options">
+  			<input type="number" id="after" onchange="buildRRule()" min="1" max="1000" value="10">
+  			<span id='afterType'></span><br>
+  		</span>
+  		<span id="onSpan" class=""options"" style="display:false">
+  			Start date<input type="date" id="dateStart" onchange="buildDTStart()" value="2017-01-01"><br>
+  		</span>
 		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
 	</div>
 	<div id="rrule">
 		RRULE <input type="text" size="53" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
 		DTSTART <input type="text" size="50" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
 	</div>
+	<button id="submitButton" onclick="loadXMLDoc()">Submit</button>
+	
+	<!-- Execute Javascript -->
 	<script type="text/javascript">
 		loadXMLDoc();
 		initDate();
 		refreshRRuleAndDTStart();
 	</script>
-	<button onclick="loadXMLDoc()">Submit</button>
+	
 	<p><span id='result'></span></p> 
 </body>
 </html>

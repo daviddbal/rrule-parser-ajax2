@@ -74,7 +74,9 @@ function buildRRule()
 	}
     
     /*
-     * Handle Day-of-Week for Weekly frequency
+     * WEEKLY
+     * 
+     * Handle Day-of-Week options
      */
     if (freq === "WEEKLY")
 	{
@@ -130,7 +132,7 @@ function buildRRule()
 	}
 
     /*
-     * Monthly options
+     * MONTHLY options
      */
     if (freq === "MONTHLY")
 	{
@@ -140,19 +142,17 @@ function buildRRule()
     	var isDayOfWeekChecked = document.getElementById('dayOfWeekCheckBox').checked;
     	var dateString = document.getElementById('dateStart').value;
     	var timeString = document.getElementById('timeStart').value;
-//   	 	console.log("timeString:" + timeString);
     	if (timeString === "")
 		{
     		var d = new Date();
     		var options = { hour12: false };
-    		timeString = d.toLocaleTimeString('default', options); // TODO - GETTING UTC TIME AND WRONG FORMAT TOO
+    		timeString = d.toLocaleTimeString('default', options);
     		console.log("timeString:" + timeString);
     		console.log(d.toLocaleTimeString('en-US', { hour12: false }));
 		}
     	var date = new Date(dateString + "T" + timeString);
     	var days = ['SU','MO','TU','WE','TH','FR','SA'];
     	var dayOfWeek = days[date.getDay()];
-//   	 	console.log(dateString + "T" + timeString);
 
    	 	if (!isDayOfMonthChecked && !isDayOfWeekChecked)
 		{
@@ -173,12 +173,46 @@ function buildRRule()
     	document.getElementById('monthlyOptions').style.display = "none";
 	}
     
+    /*
+     * END criteria
+     */
+	var isAfterChecked = document.getElementById('afterCheckBox').checked;
+	var isOnChecked = document.getElementById('onCheckBox').checked;
+	if (isAfterChecked)
+	{
+		document.getElementById('afterSpan').style.display = "inline";
+		document.getElementById('onSpan').style.display = "none";
+		var count = document.getElementById('after').value;
+		var afterType = makeIntervalType(freq, count);
+		document.getElementById('afterType').innerHTML = afterType;
+		rrule += ";COUNT=" + count;
+	} else if (isOnChecked)
+	{
+		document.getElementById('onSpan').style.display = "inline";	
+		document.getElementById('afterSpan').style.display = "none";
+	} else
+	{ // Never
+		document.getElementById('afterSpan').style.display = "none";
+		document.getElementById('onSpan').style.display = "none";
+	}
+    
     // Set RRULE text
     document.getElementById('rruleContent').value = rrule;
     
     /*
      * Interval type word
      */
+    var intervalType = makeIntervalType(freq, document.getElementById('interval').value);
+    document.getElementById('intervalType').innerHTML = intervalType;
+    console.log(freq);
+}
+
+/*
+ * Make interval or after word
+ * adjusts for singular and plural
+ */
+function makeIntervalType(freq, value)
+{
     var intervalType;
     if (freq === "DAILY")
 	{
@@ -203,13 +237,11 @@ function buildRRule()
 		intervalType = "hour";
 	}
 
-    var interval = document.getElementById('interval').value;
-    if (interval > 1)
+    if (value > 1)
 	{
     	intervalType += "s";
 	}
-    document.getElementById('intervalType').innerHTML = intervalType;
-    console.log(freq);
+    return intervalType;
 }
 
 /*
@@ -222,21 +254,28 @@ function buildDTStart()
 	dateString = dateString.replace("-","");
     var timeString = document.getElementById('timeStart').value;
 
-    var dateTimeStartString = "DTSTART"
-    if (timeString === "")
+    if (dateString === "")
 	{
-		dateTimeStartString += ";VALUE=DATE" + ":" + dateString;
+    	document.getElementById("submitButton").disabled = true;
 	} else
 	{
-		timeString = timeString.replace(":", ""); // remove minutes :
-		if (timeString.indexOf(":") > 0)
+    	document.getElementById("submitButton").disabled = false;
+	    var dateTimeStartString = "DTSTART"
+	    if (timeString === "")
 		{
-			timeString = timeString.replace(":", ""); // remove seconds :
+			dateTimeStartString += ";VALUE=DATE" + ":" + dateString;
 		} else
 		{
-			timeString += "00"; // add 2 zeros is seconds isn't present
+			timeString = timeString.replace(":", ""); // remove minutes :
+			if (timeString.indexOf(":") > 0)
+			{
+				timeString = timeString.replace(":", ""); // remove seconds :
+			} else
+			{
+				timeString += "00"; // add 2 zeros is seconds isn't present
+			}
+			dateTimeStartString += ":" + dateString + "T" + timeString;
 		}
-		dateTimeStartString += ":" + dateString + "T" + timeString;
 	}
 	document.getElementById('dateTimeStart').value = dateTimeStartString;
 }
