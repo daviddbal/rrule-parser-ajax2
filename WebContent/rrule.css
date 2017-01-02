@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+h1 {
+	color: white;
+	background: black;
+	padding: 15px;
+}
+
+div {
+	padding: 10px;
+	border: 2px solid black;
+}
+
+#rrule {
+	margin-bottom: 5px; 
+}
+
+input {
+	margin: 5px;
+}
