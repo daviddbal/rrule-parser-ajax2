@@ -1,6 +1,6 @@
 # rrule-parser-simple-jsp-ajax
 
-A simple iCalendar RRULE parser using a simple Java servlet, JSP and JavaScript using AJAX.  The AJAX code allows the server response to be displayed on the same page without a refresh (Asynchronous data transer).
+A iCalendar RRULE parser using a simple Java servlet, JSP and JavaScript using AJAX.  The AJAX code allows the server response to be displayed on the same page without a refresh (Asynchronous data transer).
 
 This version includes some styling and extra controls to build a RRULE instead of requiring the user to type it.
 

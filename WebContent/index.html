@@ -32,6 +32,24 @@
 		</select>
 		<br>
 		Repeats every<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
+		<span id='dayOfWeek'>
+			<input type="checkbox" id="sundayCheckbox" onchange="buildRRule()" value="SUNDAY">Sun
+	  		<input type="checkbox" id="mondayCheckbox" onchange="buildRRule()" value="MONDAY" >Mon
+			<input type="checkbox" id="tuesdayCheckbox" onchange="buildRRule()" value="TUESDAY">Tue
+	  		<input type="checkbox" id="wednesdayCheckbox" onchange="buildRRule()" value="WEDNESDAY" >Wed
+			<input type="checkbox" id="thursdayCheckbox" onchange="buildRRule()" value="THURSDAY">Thu
+	  		<input type="checkbox" id="fridayCheckbox" onchange="buildRRule()" value="FRIDAY" >Fri
+	  		<input type="checkbox" id="saturdayCheckbox" onchange="buildRRule()" value="SATURDAY" >Sat
+  		</span><br>
+  
+		<span id='monthlyOptions'>
+			<input type="radio" id="dayOfMonthCheckBox" onchange="buildRRule()" value="DAY_OF_MONTH" checked>Day of month
+	  		<input type="radio" id="dayOfWeekCheckBox" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week
+  		</span><br>
+  		
+		Start date<input type="date" id="dateStart" value="2017-01-01">
+		Start time<input type="time" id="timeStart"><br>
+		Days of the week<input type="number" id="interval" onchange="buildRRule()" min="1" max="1000" value="1"><span id='intervalType'></span><br>
 		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
 	</div>
 	<div id="rrule">

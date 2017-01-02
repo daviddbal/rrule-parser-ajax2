@@ -39,10 +39,102 @@ function buildRRule()
 	{
     	rrule += ";INTERVAL=" + interval;
 	}
+    
+    /*
+     * Handle Day-of-Week for Weekly frequency
+     */
+    if (freq === "WEEKLY")
+	{
+        document.getElementById('dayOfWeek').style.display = "inline";
+    	
+    	var sun = document.getElementById('sundayCheckbox').checked;
+    	var mon = document.getElementById('mondayCheckbox').checked;
+    	var tue = document.getElementById('tuesdayCheckbox').checked;
+    	var wed = document.getElementById('wednesdayCheckbox').checked;
+    	var thu = document.getElementById('thursdayCheckbox').checked;
+    	var fri = document.getElementById('fridayCheckbox').checked;
+    	var sat = document.getElementById('saturdayCheckbox').checked;
+    	
+    	if (!sun && !mon && !tue && !wed && !thu && !fri && !sat)
+		{
+        	document.getElementById('wednesdayCheckbox').checked = true;
+        	wed = true;
+		}
+    	
+    	rrule += ";BYDAY=";
+    	if (sun)
+		{
+    		rrule += "SU,";
+		}
+    	if (mon)
+		{
+    		rrule += "MO,";
+		}
+    	if (tue)
+		{
+    		rrule += "TU,";
+		}
+    	if (wed)
+		{
+    		rrule += "WE,";
+		}
+    	if (thu)
+		{
+    		rrule += "TH,";
+		}
+    	if (fri)
+		{
+    		rrule += "FR,";
+		}
+    	if (sat)
+		{
+    		rrule += "SA,";
+		}
+    	rrule = rrule.substring(0, rrule.length - 1);
+	} else
+	{
+    	document.getElementById('dayOfWeek').style.display = "none";
+	}
 
+    /*
+     * Monthly options
+     */
+    if (freq === "MONTHLY")
+	{
+        document.getElementById('monthlyOptions').style.display = "inline";
+    	
+    	var isDayOfMonthChecked = document.getElementById('dayOfMonthCheckBox').checked;
+    	var isDayOfWeekChecked = document.getElementById('dayOfWeekCheckBox').checked;
+    	var date = new Date(document.getElementById('dateStart').value);
+    	var days = ['SU','MO','TU','WE','TH','FR','SA'];
+    	var dayOfWeek = days[date.getDay()];
+   	 	console.log(date + " " + " " + dayOfWeek);
+
+   	 	if (!isDayOfMonthChecked && !isDayOfWeekChecked)
+		{
+        	document.getElementById('dayOfMonthCheckBox').checked = true;
+        	dom = true;
+		}
+    	 console.log(date + ":" + dayOfWeek);
+    	if (isDayOfWeekChecked)
+		{
+    		var ordinal = 1; // TODO - CALCULATE THIS
+			rrule += ";BYDAY=" + ordinal + dayOfWeek;
+		} else (isDayOfMonthChecked)
+		{
+			rrule += ";BYMONTHDAY=" + date.getDate();
+		}
+	} else
+	{
+    	document.getElementById('monthlyOptions').style.display = "none";
+	}
+    
+    // Set RRULE text
     document.getElementById('rruleContent').value = rrule;
     
-    // Interval type word
+    /*
+     * Interval type word
+     */
     var intervalType;
     if (freq === "DAILY")
 	{
@@ -73,5 +165,5 @@ function buildRRule()
     	intervalType += "s";
 	}
     document.getElementById('intervalType').innerHTML = intervalType;
-    console.log(intervalType);
+    console.log(freq);
 }
