@@ -29,20 +29,21 @@ public class RRuleServlet3 extends HttpServlet {
 		int limit = Integer.parseInt(request.getParameter("limit"));
 		DateTimeStart dateTimeStart = DateTimeStart.parse(request.getParameter("dateTimeStart"));
 		
-		String rrules;
+		String recurrences;
 		try {
 		RecurrenceRule rrule = RecurrenceRule.parse(rruleContent);
-		rrules = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
+		recurrences = rrule.getValue().streamRecurrences(dateTimeStart.getValue())
 				.limit(limit)
 				.map(t -> t.toString())
 				.collect(Collectors.joining(LS));
 		} catch (Exception e)
 		{
-			rrules = "Invalid";
+			recurrences = "Invalid";
 		}
 		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
-		out.print("Recurrence Series" + LS + rrules);
+//		out.print("Recurrence Series:" + LS + rrules);
+		out.print(recurrences);
 	}
 
 	/**

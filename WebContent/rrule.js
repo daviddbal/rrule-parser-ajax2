@@ -173,7 +173,7 @@ function buildRRule()
 		document.getElementById('untilSpan').style.display = "none";
 		// Set COUNT
 		var count = document.getElementById('count').value;
-		var afterType = makeIntervalType(freq, count);
+		var afterType = (count > 1) ? "events" : "event";
 		document.getElementById('countType').innerHTML = afterType;
 		rrule += ";COUNT=" + count;
 	} else if (isOnChecked)

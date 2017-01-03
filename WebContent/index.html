@@ -61,21 +61,24 @@
   		<span id="untilSpan" class="options" style="display:false">
   			End date<input type="date" id="until" onchange="buildRRule()"><br>
   		</span>
-		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
+		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="50"><br>
 	</div>
 	<div id="rrule">
 		RRULE <input type="text" size="53" id="rruleContent" value="RRULE:FREQ=DAILY" ><br>
 		DTSTART <input type="text" size="50" id="dateTimeStart" value="DTSTART:20170101T120000" ><br>
 	</div>
 	<button id="submitButton" onclick="loadXMLDoc()">Submit</button>
+	<br>
 	
 	<!-- Execute Javascript -->
 	<script type="text/javascript">
-		loadXMLDoc();
 		initDate();
 		refreshRRuleAndDTStart();
+		loadXMLDoc();
 	</script>
-	
-	<p><span id='result'></span></p> 
+	<h3>Resulting Recurrences Series:</h3>
+	<div id=recurrences>
+		<span id='result'></span>
+	</div>
 </body>
 </html>
