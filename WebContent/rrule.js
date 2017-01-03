@@ -186,11 +186,15 @@ function buildRRule()
 		var offset = new Date().getTimezoneOffset();
 		var untilDate = new Date(untilDateString + "T" + timeString);
 		untilDate.setTime(untilDate.getTime() + untilDate.getTimezoneOffset()*60*1000); // time zone offset adjustment
-		var untilDateString = untilDate.toISOString();
-		untilDateString = untilDateString.replace(/-/g, ""); // remove dashes
-		untilDateString = untilDateString.replace(/:/g, ""); // remove colons
-		untilDateString = untilDateString.substring(0, untilDateString.indexOf(".")) + "Z"; // remove fraction of second
-		rrule += ";UNTIL=" + untilDateString;
+		var timestamp = Date.parse(untilDate);
+		if (! isNaN(timestamp))
+		{
+			var untilDateString = untilDate.toISOString();
+			untilDateString = untilDateString.replace(/-/g, ""); // remove dashes
+			untilDateString = untilDateString.replace(/:/g, ""); // remove colons
+			untilDateString = untilDateString.substring(0, untilDateString.indexOf(".")) + "Z"; // remove fraction of second
+			rrule += ";UNTIL=" + untilDateString;
+		}
 	} else
 	{ // Never end checkbox
 		document.getElementById('countSpan').style.display = "none";
