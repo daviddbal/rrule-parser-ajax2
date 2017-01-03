@@ -35,22 +35,19 @@ function loadXMLDoc()
 function initDate()
 {
     var date = new Date();
-    var dateString = buildDate(date, "-"); // assemble ISO 8601 date
-    console.log("init dateString:" + dateString + " " + date);
+    // DTSTART
+    var dateString = buildDateString(date, "-"); // assemble ISO 8601 date
     document.getElementById('dateStart').value = dateString;
-}
-
-/*
- * Build a date string
- */
-function buildDate(date, delimiter)
-{
-    var yearString = date.toLocaleDateString('default', {year: 'numeric'});
-    var monthString = date.toLocaleDateString('default', {month: 'numeric'});
-    monthString = ("0" + monthString).slice(-2); // make 2-digits
-    var dayString = date.toLocaleDateString('default', {day: 'numeric'});
-    dayString = ("0" + dayString).slice(-2); // make 2-digits
-    return yearString + delimiter + monthString + delimiter + dayString;
+    
+    // UNTIL
+    date.setMonth(date.getMonth()+1);
+    var untilDateString = buildDateString(date, "-"); // assemble ISO 8601 date
+    document.getElementById('until').value = untilDateString;
+    
+    // TIME
+	var options = { hour12: false };
+	var timeString = date.toLocaleTimeString('default', options);
+    document.getElementById('timeStart').value = timeString;
 }
 
 function refreshRRuleAndDTStart()
@@ -142,15 +139,7 @@ function buildRRule()
     	var isDayOfWeekChecked = document.getElementById('dayOfWeekCheckBox').checked;
     	var dateString = document.getElementById('dateStart').value;
     	var timeString = document.getElementById('timeStart').value;
-    	if (timeString === "")
-		{
-    		var d = new Date();
-    		var options = { hour12: false };
-    		timeString = d.toLocaleTimeString('default', options);
-    		console.log("timeString:" + timeString);
-    		console.log(d.toLocaleTimeString('en-US', { hour12: false }));
-		}
-    	var date = new Date(dateString + "T" + timeString);
+    	var date = makeDateTime(dateString, timeString)
     	var days = ['SU','MO','TU','WE','TH','FR','SA'];
     	var dayOfWeek = days[date.getDay()];
 
@@ -180,23 +169,37 @@ function buildRRule()
 	var isOnChecked = document.getElementById('onCheckBox').checked;
 	if (isAfterChecked)
 	{
-		document.getElementById('afterSpan').style.display = "inline";
-		document.getElementById('onSpan').style.display = "none";
-		var count = document.getElementById('after').value;
+		document.getElementById('countSpan').style.display = "inline";
+		document.getElementById('untilSpan').style.display = "none";
+		// Set COUNT
+		var count = document.getElementById('count').value;
 		var afterType = makeIntervalType(freq, count);
-		document.getElementById('afterType').innerHTML = afterType;
+		document.getElementById('countType').innerHTML = afterType;
 		rrule += ";COUNT=" + count;
 	} else if (isOnChecked)
 	{
-		document.getElementById('onSpan').style.display = "inline";	
-		document.getElementById('afterSpan').style.display = "none";
+		document.getElementById('untilSpan').style.display = "inline";	
+		document.getElementById('countSpan').style.display = "none";
+		var untilDateString = document.getElementById('until').value;
+		var timeString = document.getElementById('timeStart').value;
+		var timeZone = new Date().toString().substring(24);
+		var offset = new Date().getTimezoneOffset();
+		var untilDate = new Date(untilDateString + "T" + timeString);
+		untilDate.setTime(untilDate.getTime() + untilDate.getTimezoneOffset()*60*1000); // time zone offset adjustment
+		var untilDateString = untilDate.toISOString();
+		untilDateString = untilDateString.replace(/-/g, ""); // remove dashes
+		untilDateString = untilDateString.replace(/:/g, ""); // remove colons
+		untilDateString = untilDateString.substring(0, untilDateString.indexOf(".")) + "Z"; // remove fraction of second
+		rrule += ";UNTIL=" + untilDateString;
 	} else
-	{ // Never
-		document.getElementById('afterSpan').style.display = "none";
-		document.getElementById('onSpan').style.display = "none";
+	{ // Never end checkbox
+		document.getElementById('countSpan').style.display = "none";
+		document.getElementById('untilSpan').style.display = "none";
 	}
     
-    // Set RRULE text
+	/*
+	 * Set RRULE text
+	 */
     document.getElementById('rruleContent').value = rrule;
     
     /*
@@ -204,7 +207,32 @@ function buildRRule()
      */
     var intervalType = makeIntervalType(freq, document.getElementById('interval').value);
     document.getElementById('intervalType').innerHTML = intervalType;
-    console.log(freq);
+}
+
+function makeDateTime(dateString, timeString)
+{
+	if (timeString === "")
+	{
+		var d = new Date();
+		var options = { hour12: false };
+		timeString = d.toLocaleTimeString('default', options);
+//		console.log("timeString:" + timeString);
+//		console.log(d.toLocaleTimeString('en-US', { hour12: false }));
+	}
+	return new Date(dateString + "T" + timeString);
+}
+
+/*
+ * Build a date string
+ */
+function buildDateString(date, delimiter)
+{
+    var yearString = date.toLocaleDateString('default', {year: 'numeric'});
+    var monthString = date.toLocaleDateString('default', {month: 'numeric'});
+    monthString = ("0" + monthString).slice(-2); // make 2-digits
+    var dayString = date.toLocaleDateString('default', {day: 'numeric'});
+    dayString = ("0" + dayString).slice(-2); // make 2-digits
+    return yearString + delimiter + monthString + delimiter + dayString;
 }
 
 /*

@@ -47,19 +47,19 @@
 	  		<input type="radio" id="dayOfWeekCheckBox" name="monthlyRadioButtons" onchange="buildRRule()" value="DAY_OF_WEEK" >Day of week<br>
   		</span>
   		
-		Start date<input type="date" id="dateStart" onchange="buildDTStart()" value="2017-01-01">
-		Start time<input type="time" id="timeStart" step="1" onchange="buildDTStart()" value="12:00:00"><br>
+		Start date<input type="date" id="dateStart" onchange="buildDTStart()">
+		Start time<input type="time" id="timeStart" step="1" onchange="buildDTStart()"><br>
 		
 		Ends:
 		<input type="radio" id="neverCheckBox" name="endRadioButtons" onchange="buildRRule()" checked>Never
   		<input type="radio" id="afterCheckBox" name="endRadioButtons" onchange="buildRRule()" >After
   		<input type="radio" id="onCheckBox" name="endRadioButtons" onchange="buildRRule()">On<br>
-  		<span id="afterSpan" class="options">
-  			<input type="number" id="after" onchange="buildRRule()" min="1" max="1000" value="10">
-  			<span id='afterType'></span><br>
+  		<span id="countSpan" class="options">
+  			<input type="number" id="count" onchange="buildRRule()" min="1" max="1000" value="10">
+  			<span id='countType'></span><br>
   		</span>
-  		<span id="onSpan" class=""options"" style="display:false">
-  			Start date<input type="date" id="dateStart" onchange="buildDTStart()" value="2017-01-01"><br>
+  		<span id="untilSpan" class="options" style="display:false">
+  			End date<input type="date" id="until" onchange="buildDTStart()"><br>
   		</span>
 		Max Recurrences Displayed<input type="number" id="limit" min="1" max="1000" value="5"><br>
 	</div>
