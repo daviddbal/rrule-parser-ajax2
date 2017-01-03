@@ -50,6 +50,7 @@ function initDate()
     document.getElementById('timeStart').value = timeString;
 }
 
+// Entry point for refresh operation
 function refreshRRuleAndDTStart()
 {
 	buildRRule();

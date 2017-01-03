@@ -12,9 +12,20 @@
 
 <body>
 	<h1>RRULE Parser</h1>
+	<h4>Introduction</h4>
 	<p>An iCalendar RRULE (recurrence rule) parser based on <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> .
-	 Generates a list of date or date/time values for the specified RRULE and DTSTART values.  Uses iCalendarFx, an iCalendar Java library from <a href="http://jfxtras.org">JFXtras</a>.
-	 </p>
+	Generates a list of date or date/time values for the specified RRULE and DTSTART values.  Uses iCalendarFx, an iCalendar Java library from <a href="http://jfxtras.org">JFXtras</a>.
+	</p>
+	<h4>Usage</h4>
+	<p>
+		This application can be used two ways:
+		<ol>
+		 	<li>Modify the controls such as repeat frequency, start date, etc.  When they are changed the RRULE and DTSTART properties will automatically modified accordingly.</li>
+		 	<li>Type in a RRULE and DTSTART property manually.  While the controls mentioned above provide only a subset of the <a href="https://tools.ietf.org/html/rfc5545">RFC 5545</a> RRULE elements, you can use all RRULE elements by typing the property manually.</li>
+	 	</ol>
+	 	If you have any comments please feel free to send me an email at <a href="mailto:david.bal37@gmail.com">david.bal37@gmail.com</a>
+	</p>
+	 
 	<div id="builder">
 		Repeat Frequency:
 		<select required id="freq" onchange="buildRRule()">
